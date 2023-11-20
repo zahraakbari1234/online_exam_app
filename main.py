@@ -1,10 +1,7 @@
-from tkinter import *
-from splash_screen import *
-
-
+from tkinter import*
+from splash_screen import*
+  
 def main():
-    gui = splash_screen()
+     gui = splash_screen()
 
-
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__":main()

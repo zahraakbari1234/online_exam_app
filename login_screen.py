@@ -25,11 +25,15 @@ def login_screen(self):
                                    anchor=NW)
 
 ##############
-    self.password_entry = Entry(self.login_canvas, width=15, font=("b_nazanin", 18),
+    self.password = StringVar()
+    self.password_entry = Entry(self.login_canvas, textvariable=self.password,
+                                width=15, font=("b_nazanin", 18),
                                 bg=AppConstants.cream)
     self.password_entry.pack()
     self.password_entry.place(x=200, y=70)
     self.password_entry.config(show='*')
+
+
 ##############
     self.save = BooleanVar()
     self.check1 = Checkbutton(
@@ -38,6 +42,7 @@ def login_screen(self):
     self.check1.place(x=420, y=157)
     self.check1.config(variable=self.save, onvalue=1, offvalue=0)
     self.save.set(1)
+
 ################
     self.answers_button_img = PhotoImage(
         file=AppConstants.answers_button_add)

@@ -1,15 +1,15 @@
-from tkinter import*
+from tkinter import *
 
 
 class AppConstants:
-        
+
     yellow_color = "#FFD379"
-    main_color =   "#89DAD0"
+    main_color = "#89DAD0"
     light_orange = "#FCAB88"
     amber_accent = "#FFBF00"
     cream = "#F3EEEA"
-    logo_add =     "logo.png"
-    text_logo_add ="assets/text_logo.png"
+    logo_add = "logo.png"
+    text_logo_add = "assets/text_logo.png"
     key_add = "assets/key.png"
     exit_small_button_add = "assets/exit_small_button.png"
     login_button_add = "assets/login_button.png"
@@ -29,12 +29,5 @@ class AppConstants:
     finish_button_add = "assets/finish_button.png"
     key_backgnd_add = "assets/key_backgnd.png"
     reult_backgnd_add = "assets/result_backgnd.png"
-    
 
    
-     
-
-   
-        
-     
-     

@@ -26,20 +26,24 @@ def change_password_screen(self):
                                              anchor=NW)
 
 ##############
-    self.password_entry = Entry(self.change_password_canvas, width=15, font=("b_nazanin", 18),
+
+    self.password_entry = Entry(self.change_password_canvas, textvariable=self.password,
+                                width=15, font=("b_nazanin", 18),
                                 bg=AppConstants.cream)
     self.password_entry.pack()
     self.password_entry.place(x=200, y=70)
     self.password_entry.config(show='*')
 ##############
-    self.new_password_entry = Entry(self.change_password_canvas, width=15, font=("b_nazanin", 18),
+    self.new_password = StringVar()
+    self.new_password_entry = Entry(self.change_password_canvas, textvariable=self.new_password, width=15, font=("b_nazanin", 18),
                                     bg=AppConstants.cream)
     self.new_password_entry.pack()
     self.new_password_entry.place(x=200, y=130)
     self.new_password_entry.config(show='*')
 ##############
     ##############
-    self.verify_new_password_entry = Entry(self.change_password_canvas, width=15, font=("b_nazanin", 18),
+    self.verify_new_password = StringVar()
+    self.verify_new_password_entry = Entry(self.change_password_canvas, textvariable=self.verify_new_password, width=15, font=("b_nazanin", 18),
                                            bg=AppConstants.cream)
     self.verify_new_password_entry.pack()
     self.verify_new_password_entry.place(x=200, y=190)

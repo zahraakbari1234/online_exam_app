@@ -27,6 +27,8 @@ class AppConstants:
     exit_large_button_add = "assets/exit_large_button.png"
     no_image_add = "assets/no_image.png"
     finish_button_add = "assets/finish_button.png"
+    key_backgnd_add = "assets/key_backgnd.png"
+    reult_backgnd_add = "assets/result_backgnd.png"
     
 
    

@@ -1,0 +1,5 @@
+1 - could not recall a clas after distroying it
+
+2- could not refresh a canvas after deiconifying the parent 
+
+3-how to join forms together?

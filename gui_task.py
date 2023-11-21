@@ -14,6 +14,7 @@ class gui_task:
     number_of_q = 10
     result = 0
     Q = 1
+    score = 0
 
     pass_student = "1234"
     pass_teacher = "4321"
@@ -29,45 +30,31 @@ class gui_task:
 
     def __init__(self):
 
-        try:
-
-            f = open('password.txt', 'r')
-            self.password_file_txt = f.read()
-            f.close()
-
-        except:
-            pass
-
-        try:
-
-            f = open('key.txt', 'r')
-            self.key_file_txt = f.read()
-            f.close()
-
-        except:
-            pass
-
-        try:
-
-            f = open('result.txt', 'r')
-            self.result_file_txt = f.read()
-            f.close()
-
-        except:
-            pass
+        self.read_password()
+        self.read_key()
 
         login_screen(self=self)
         profile_screen(self=self)
         change_password_screen(self=self)
         key_screen(self=self)
         result_screen(self=self)
+        questions_screen(self=self)
         self.root.mainloop()
 
     def answers_func(self, event=None):
-        self.Q = 1
-        self.root.withdraw()
-        self.key_win.deiconify()
-        self.key_canvas.update_idletasks()
+
+        self.entered_password = self.password.get()
+        print(self.entered_password)
+
+        if (self.entered_password == self.pass_teacher):
+
+            self.Q = 1
+            self.root.withdraw()
+            self.key_win.deiconify()
+            self.key_canvas.update_idletasks()
+
+        else:
+            print("enter password again")
 
     def login_func(self, event=None):
 
@@ -98,10 +85,14 @@ class gui_task:
             if (self.entered_new_password == self.entered_verify_new_password):
                 self.pass_student = self.entered_new_password
                 self.password_entry.delete(0, END)
+                self.new_password_entry.delete(0, END)
+                self.verify_new_password_entry.delete(0, END)
                 self.root.update()
                 self.root.deiconify()
                 self.login_canvas.update_idletasks()
                 self.change_password_win.withdraw()
+
+                self.save_password()
 
         elif (self.entered_password == self.pass_teacher):
             if (self.entered_new_password == self.entered_verify_new_password):
@@ -112,11 +103,15 @@ class gui_task:
                 self.login_canvas.update_idletasks()
                 self.change_password_win.withdraw()
 
+                self.save_password()
+
         else:
             print("enter correct arguments")
 
     def change_password_cancel_func(self, event=None):
         self.password_entry.delete(0, END)
+        self.new_password_entry.delete(0, END)
+        self.verify_new_password_entry.delete(0, END)
         self.root.update()
         self.root.deiconify()
         self.login_canvas.update_idletasks()
@@ -135,11 +130,23 @@ class gui_task:
         self.questions_screen_win.after(10, self.update_question_clock)
 
     def profile_start_func(self, event=None):
-        self.Q = 1
-        self.profile_win.withdraw()
-        questions_screen(self=self)
-        self.questions_screen_win.deiconify()
-        self.questions_screen_canvas.update_idletasks()
+        self.name = self.name_entry.get()
+        self.sirname = self.sirname_entry.get()
+        self.id = self.id_entry.get()
+
+        print(self.name)  # test
+        print(self.sirname)  # test
+        print(self.id)  # test
+
+        if (self.name != "" and self.sirname != "" and self.id != ""):
+            if (self.info_ok.get()):
+                self.Q = 1
+                self.profile_win.withdraw()
+                self.questions_screen_win.deiconify()
+                self.questions_screen_canvas.update_idletasks()
+
+        else:
+            print("enter arqument")
 
     def next_q_func(self, event=None):
 
@@ -188,6 +195,11 @@ class gui_task:
         self.result_list[self.Q] = self.result.get()
         print(self.result_list)  # test
         self.questions_screen_win.withdraw()
+        self.score = self.calculate_score(
+            self.result_list, self.key_answers_list)
+        self.score_label.config(text=self.score)
+        self.show_emoji()
+        self.save_student_info()
         self.result_win.deiconify()
         self.result_canvas.update_idletasks()
 
@@ -231,14 +243,17 @@ class gui_task:
                                                           anchor=NW)
 
     def key_cancel_func(self, event=None):
+        self.password_entry.delete(0, END)
         self.root.update()
         self.root.deiconify()
         self.login_canvas.update_idletasks()
         self.key_win.withdraw()
 
     def key_enter_func(self, event=None):
+        self.password_entry.delete(0, END)
         for i in range(self.number_of_q + 1):
             self.key_answers_list[i] = self.key_answers[i].get()
+            self.save_key()
             print(self.key_answers[i].get())  # test
 
         print(self.key_answers_list)  # test
@@ -247,3 +262,103 @@ class gui_task:
         self.root.deiconify()
         self.login_canvas.update_idletasks()
         self.key_win.withdraw()
+
+    def calculate_score(self, result_list, key_answers_list):
+
+        self.result_list = result_list
+        self.key_answers_list = key_answers_list
+        score = 0
+
+        for i in range(1, self.number_of_q+1):
+            if (self.result_list[i] == self.key_answers_list[i]):
+                score += 1
+
+        print(score)
+        return score
+
+    def show_emoji(self):
+
+        if (self.score > self.number_of_q - 3):
+            self.emoji_img = PhotoImage(file=AppConstants.excellent_emoji_add)
+            self.result_emoji = self.result_canvas.create_image(130, 110,
+                                                                image=self.emoji_img,
+                                                                anchor=NW)
+
+        elif (self.score > self.number_of_q - 6):
+            self.emoji_img = PhotoImage(file=AppConstants.good_emoji_add)
+            self.result_emoji = self.result_canvas.create_image(130, 110,
+                                                                image=self.emoji_img,
+                                                                anchor=NW)
+
+        elif (self.score > self.number_of_q - 8):
+            self.emoji_img = PhotoImage(file=AppConstants.bad_emoji_add)
+            self.result_emoji = self.result_canvas.create_image(130, 110,
+                                                                image=self.emoji_img,
+                                                                anchor=NW)
+
+        elif (self.score < self.number_of_q - 8):
+            self.emoji_img = PhotoImage(file=AppConstants.oops_emoji_add)
+            self.result_emoji = self.result_canvas.create_image(130, 110,
+                                                                image=self.emoji_img,
+                                                                anchor=NW)
+
+    def save_student_info(self):
+        f = open('result.txt', 'a')
+        f.write('name=%s sirname=%s id=%s score=%d time=%s !\n\n' %
+                (self.name, self.sirname, self.id, self.score, time.asctime()[11:19]))
+        f.close()
+
+    def save_password(self):
+        f = open('password.txt', 'w')
+        f.write('student_pass=%s\nteacher_pass=%s' %
+                (self.pass_student, self.pass_teacher))
+        f.close()
+
+    def save_key(self):
+        f = open('key.txt', 'w')
+        for i in range(1, self.number_of_q + 1):
+            f.write('Q%02d=%d\n' %
+                    (i, self.key_answers[i].get()))
+        f.close()
+
+    def read_password(self):
+        try:
+
+            f = open('password.txt', 'r')
+            self.password_file_txt = f.read()
+            f.close()
+
+            self.pass_student_index = self.password_file_txt.find(
+                'student_pass=')
+            self.pass_teacher_index = self.password_file_txt.find(
+                'teacher_pass=')
+
+            self.pass_student = self.password_file_txt[self.pass_student_index + 13:
+                                                       self.pass_teacher_index-1]
+
+            self.pass_teacher = self.password_file_txt[self.pass_teacher_index + 13:]
+
+            print(self.password_file_txt)  # test
+            print(self.pass_student)  # test
+            print(self.pass_teacher)  # test
+
+        except:
+            pass
+
+    def read_key(self):
+        try:
+
+            f = open('key.txt', 'r')
+            self.key_file_txt = f.read()
+            f.close()
+
+            for i in range(1, self.number_of_q+1):
+                self.Q_index = self.key_file_txt.find('Q%02d=' % i)
+                self.key_answers_list[i] = int(
+                    self.key_file_txt[self.Q_index + 4])
+
+            print(self.key_file_txt)  # test
+            print(self.key_answers_list)  # test
+
+        except:
+            pass

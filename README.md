@@ -1,1 +1,1 @@
-# online_exam_app
+# this project is developed as a final project for python course. this is a test app can be used in many institutes .

@@ -29,5 +29,7 @@ class AppConstants:
     finish_button_add = "assets/finish_button.png"
     key_backgnd_add = "assets/key_backgnd.png"
     reult_backgnd_add = "assets/result_backgnd.png"
-
-   
+    excellent_emoji_add = "assets/excellent_emoji.png"
+    good_emoji_add = "assets/good_emoji.png"
+    bad_emoji_add = "assets/bad_emoji.png"
+    oops_emoji_add = "assets/oops_emoji.png"

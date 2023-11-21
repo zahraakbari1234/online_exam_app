@@ -25,6 +25,13 @@ def result_screen(self):
                                     anchor=NW)
 
 ##############
+    self.score_label = Label(self.result_win, text=self.score, font=("b nazanin",  20),
+                             bg="#ffffff")
+    self.score_label.pack()
+    self.score_label.place(x=220, y=120)
+
+
+##############
     self.result_exit_img = PhotoImage(file=AppConstants.exit_small_button_add)
     self.result_exit = self.result_canvas.create_image(200, 210,
                                                        image=self.result_exit_img,

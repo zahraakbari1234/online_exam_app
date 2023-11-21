@@ -1,5 +1,7 @@
-1 - could not recall a clas after distroying it
+1 - how to pass var from one class to other
 
-2- could not refresh a canvas after deiconifying the parent 
+2- global var
 
-3-how to join forms together?
+3-date does not update
+
+4) hashing?

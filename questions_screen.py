@@ -62,19 +62,19 @@ def questions_screen(self):
     self.result = IntVar()
     self.alef = Radiobutton(self.questions_screen_canvas, variable=self.result, value=1,
                             bg="#ffffff", activebackground="#ffffff")
-    self.alef.place(x=910, y=188)
+    self.alef.place(x=910, y=180)
 
     self.be = Radiobutton(self.questions_screen_canvas, variable=self.result, value=2,
                           bg="#ffffff", activebackground="#ffffff")
-    self.be.place(x=910, y=220)
+    self.be.place(x=910, y=212)
 
     self.jim = Radiobutton(self.questions_screen_canvas, variable=self.result, value=3,
                            bg="#ffffff", activebackground="#ffffff")
-    self.jim.place(x=910, y=260)
+    self.jim.place(x=910, y=248)
 
     self.dul = Radiobutton(self.questions_screen_canvas, variable=self.result, value=4,
                            bg="#ffffff", activebackground="#ffffff")
-    self.dul.place(x=910, y=300)
+    self.dul.place(x=910, y=282)
 
 ##############
     self.next_q_button_img = PhotoImage(

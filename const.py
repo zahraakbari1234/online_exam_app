@@ -33,3 +33,7 @@ class AppConstants:
     good_emoji_add = "assets/good_emoji.png"
     bad_emoji_add = "assets/bad_emoji.png"
     oops_emoji_add = "assets/oops_emoji.png"
+    chng_ramz_add = "assets/chng_ramz.png"
+    password_database_add = "database/password.txt"
+    result_database_add = "database/result.txt"
+    key_database_add = "database/key.txt"

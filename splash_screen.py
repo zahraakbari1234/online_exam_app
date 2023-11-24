@@ -29,7 +29,7 @@ class splash_screen:
         self.label_splash .pack()
         self.label_splash .place(x=10, y=200)
 
-        self.splash.after(10, self.go_login_screen)
+        self.splash.after(4000, self.go_login_screen)
 
         self.splash.mainloop()
 

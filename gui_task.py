@@ -6,7 +6,9 @@ from questions_screen import *
 from login_screen import *
 from key_screen import *
 from result_screen import *
+from pass_msg import *
 import os
+import bcrypt
 
 
 class gui_task:
@@ -39,14 +41,18 @@ class gui_task:
         key_screen(self=self)
         result_screen(self=self)
         questions_screen(self=self)
+        message_screen(self=self)
         self.root.mainloop()
 
     def answers_func(self, event=None):
 
         self.entered_password = self.password.get()
-        print(self.entered_password)
+        # Encode the entered password
+        self.entered_password_encoded = self.entered_password.encode('utf-8')
 
-        if (self.entered_password == self.pass_teacher):
+        print(self.entered_password_encoded)  # test
+
+        if bcrypt.checkpw(self.entered_password_encoded, self.hashed_pass_teacher):
 
             self.Q = 1
             self.root.withdraw()
@@ -59,10 +65,14 @@ class gui_task:
     def login_func(self, event=None):
 
         self.entered_password = self.password.get()
-        print(self.entered_password)
+        # Encode the entered password
+        self.entered_password_encoded = self.entered_password.encode('utf-8')
 
-        if (self.entered_password == self.pass_student
-                or self.entered_password == self.pass_teacher):
+        print(self.entered_password_encoded)  # test
+
+        if ((bcrypt.checkpw(self.entered_password_encoded, self.hashed_pass_student)) or
+                (bcrypt.checkpw(self.entered_password_encoded, self.hashed_pass_teacher))):
+
             self.root.withdraw()
             self.profile_win.deiconify()
             self.profile_canvas.update_idletasks()
@@ -71,6 +81,7 @@ class gui_task:
             print("cant login try again")
 
     def chng_pass_func(self, event=None):
+        self.password_entry.delete(0, END)
         self.root.withdraw()
         self.change_password_win.deiconify()
         self.change_password_canvas.update_idletasks()
@@ -81,27 +92,26 @@ class gui_task:
         self.entered_new_password = self.new_password.get()
         self.entered_verify_new_password = self.verify_new_password.get()
 
-        if (self.entered_password == self.pass_student):
+        # Encode the entered password
+        self.entered_password_encoded = self.entered_password.encode('utf-8')
+
+        if bcrypt.checkpw(self.entered_password_encoded, self.hashed_pass_student):
             if (self.entered_new_password == self.entered_verify_new_password):
                 self.pass_student = self.entered_new_password
-                self.password_entry.delete(0, END)
-                self.new_password_entry.delete(0, END)
-                self.verify_new_password_entry.delete(0, END)
-                self.root.update()
-                self.root.deiconify()
-                self.login_canvas.update_idletasks()
-                self.change_password_win.withdraw()
+
+                self.message_win.deiconify()
+                self.message_canvas.update_idletasks()
+                self.root.after(4000, self.hide_masg)
 
                 self.save_password()
 
-        elif (self.entered_password == self.pass_teacher):
+        elif bcrypt.checkpw(self.entered_password_encoded, self.hashed_pass_teacher):
             if (self.entered_new_password == self.entered_verify_new_password):
                 self.pass_teacher = self.entered_new_password
-                self.password_entry.delete(0, END)
-                self.root.update()
-                self.root.deiconify()
-                self.login_canvas.update_idletasks()
-                self.change_password_win.withdraw()
+
+                self.message_win.deiconify()
+                self.message_canvas.update_idletasks()
+                self.root.after(4000, self.hide_msg)
 
                 self.save_password()
 
@@ -153,6 +163,7 @@ class gui_task:
         if (self.Q < self.number_of_q):
             print(self.result.get())
             self.result_list[self.Q] = self.result.get()
+            self.result.set(0)
             print(self.result_list)
             self.Q += 1
             try:
@@ -208,16 +219,17 @@ class gui_task:
         if (self.Q == self.number_of_q):
             self.next_q_button_img = PhotoImage(
                 file=AppConstants.next_q_button_add)
-            self.next_q_button = self.canvas.create_image(23, 210,
-                                                          image=self.next_q_button_img,
-                                                          anchor=NW)
+            self.next_q_button = self.questions_screen_canvas.create_image(23, 210,
+                                                                           image=self.next_q_button_img,
+                                                                           anchor=NW)
 
-            self.canvas.tag_bind(self.next_q_button,
-                                 '<Button-1>', self.next_q_func)
+            self.questions_screen_canvas.tag_bind(self.next_q_button,
+                                                  '<Button-1>', self.next_q_func)
 
         if (self.Q > 1):
             print(self.result.get())  # test
             self.result_list[self.Q] = self.result.get()
+            self.result.set(0)
             print(self.result_list)  # test
             self.Q -= 1
             try:
@@ -303,19 +315,29 @@ class gui_task:
                                                                 anchor=NW)
 
     def save_student_info(self):
-        f = open('result.txt', 'a')
+        f = open(AppConstants.result_database_add, 'a')
         f.write('name=%s sirname=%s id=%s score=%d time=%s !\n\n' %
                 (self.name, self.sirname, self.id, self.score, time.asctime()[11:19]))
         f.close()
 
     def save_password(self):
-        f = open('password.txt', 'w')
+
+        # Encode the stored password
+        self.pass_student_encoded = self.pass_student.encode('utf-8')
+        self.pass_teacher_encoded = self.pass_teacher.encode('utf-8')
+        # Hash the password
+        self.hashed_pass_student = bcrypt.hashpw(
+            self.pass_student_encoded, bcrypt.gensalt())
+        self.hashed_pass_teacher = bcrypt.hashpw(
+            self.pass_teacher_encoded, bcrypt.gensalt())
+
+        f = open(AppConstants.password_database_add, 'w')
         f.write('student_pass=%s\nteacher_pass=%s' %
-                (self.pass_student, self.pass_teacher))
+                (self.hashed_pass_student, self.hashed_pass_teacher))
         f.close()
 
     def save_key(self):
-        f = open('key.txt', 'w')
+        f = open(AppConstants.key_database_add, 'w')
         for i in range(1, self.number_of_q + 1):
             f.write('Q%02d=%d\n' %
                     (i, self.key_answers[i].get()))
@@ -324,7 +346,7 @@ class gui_task:
     def read_password(self):
         try:
 
-            f = open('password.txt', 'r')
+            f = open(AppConstants.password_database_add, 'r')
             self.password_file_txt = f.read()
             f.close()
 
@@ -333,22 +355,27 @@ class gui_task:
             self.pass_teacher_index = self.password_file_txt.find(
                 'teacher_pass=')
 
-            self.pass_student = self.password_file_txt[self.pass_student_index + 13:
-                                                       self.pass_teacher_index-1]
+            self.hashed_pass_student = self.password_file_txt[self.pass_student_index + 15:
+                                                              self.pass_teacher_index-2]
 
-            self.pass_teacher = self.password_file_txt[self.pass_teacher_index + 13:]
+            self.hashed_pass_teacher = self.password_file_txt[
+                self.pass_teacher_index + 15: self.pass_teacher_index + 15 + 60]
+
+            # Encode the stored password
+            self.hashed_pass_student = self.hashed_pass_student.encode('utf-8')
+            self.hashed_pass_teacher = self.hashed_pass_teacher.encode('utf-8')
 
             print(self.password_file_txt)  # test
-            print(self.pass_student)  # test
-            print(self.pass_teacher)  # test
+            print(self.hashed_pass_student)  # test
+            print(self.hashed_pass_teacher)  # test
 
         except:
-            pass
+            self.save_password()
 
     def read_key(self):
         try:
 
-            f = open('key.txt', 'r')
+            f = open(AppConstants.result_database_add, 'r')
             self.key_file_txt = f.read()
             f.close()
 
@@ -362,3 +389,15 @@ class gui_task:
 
         except:
             pass
+
+    def hide_masg(self):
+
+        self.password_entry.delete(0, END)
+        self.new_password_entry.delete(0, END)
+        self.verify_new_password_entry.delete(0, END)
+
+        self.message_win.withdraw()
+        self.root.update()
+        self.root.deiconify()
+        self.login_canvas.update_idletasks()
+        self.change_password_win.withdraw()

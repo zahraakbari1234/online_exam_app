@@ -9,8 +9,8 @@ def message_screen(self):
 
     self.message_win = Toplevel(self.root)
     self.message_win.config(bg="#ffffff")
-    self.message_win.geometry("229x94+%d+%d" % (self.message_win.winfo_screenwidth() /
-                              2-114, self.message_win.winfo_screenheight()/2-47))
+    self.message_win.geometry("300x123+%d+%d" % (self.message_win.winfo_screenwidth() /
+                              2-150, self.message_win.winfo_screenheight()/2-61.5))
     self.message_win.resizable(False, False)
     self.message_win.overrideredirect(True)
     self.message_win.title("Profile")

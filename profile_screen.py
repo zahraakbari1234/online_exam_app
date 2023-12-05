@@ -20,7 +20,7 @@ def profile_screen(self):
     self.profile_canvas.pack()
     #############
     self.profile_time_date = Label(self.profile_canvas,
-                                   text=time.asctime()[11:19]+"\n"+time.asctime()[4:9]+" "+time.asctime()[20:24], bg="#ffffff",
+                                   text=time.asctime()[11:19]+"\n"+time.asctime()[4:10]+" "+time.asctime()[20:24], bg="#ffffff",
                                    fg="#000000", font=("Bnazanin", 10, "bold"))
     self.profile_time_date.pack()
     self.profile_time_date.place(x=8, y=250)

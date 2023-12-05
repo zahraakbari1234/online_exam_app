@@ -129,13 +129,13 @@ class gui_task:
 
     def update_profile_clock(self):
         self.profile_time_date.config(
-            text=time.asctime()[11:19]+"\n"+time.asctime()[4:9]+" "+time.asctime()[20:24], bg="#ffffff",)
+            text=time.asctime()[11:19]+"\n"+time.asctime()[4:10]+" "+time.asctime()[20:24], bg="#ffffff",)
         self.profile_win.update()
         self.profile_win.after(10, self.update_profile_clock)
 
     def update_question_clock(self):
         self.questions_screen_time_date.config(
-            text=time.asctime()[11:19]+"\n"+time.asctime()[4:9]+" "+time.asctime()[20:24], bg="#ffffff",)
+            text=time.asctime()[11:19]+"\n"+time.asctime()[4:10]+" "+time.asctime()[20:24], bg="#ffffff",)
         self.questions_screen_win.update()
         self.questions_screen_win.after(10, self.update_question_clock)
 

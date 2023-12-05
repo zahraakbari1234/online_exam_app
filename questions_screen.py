@@ -28,7 +28,7 @@ def questions_screen(self):
 
 ##############
     self.questions_screen_time_date = Label(self.questions_screen_canvas,
-                                            text=time.asctime()[11:19]+"\n"+time.asctime()[4:9]+" "+time.asctime()[20:24], bg="#ffffff",
+                                            text=time.asctime()[11:19]+"\n"+time.asctime()[4:10]+" "+time.asctime()[20:24], bg="#ffffff",
                                             fg="#000000", font=("Bnazanin", 15, "bold"))
     self.questions_screen_time_date.pack()
     self.questions_screen_time_date.place(x=35, y=590)
